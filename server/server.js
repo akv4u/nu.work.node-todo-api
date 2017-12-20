@@ -1,9 +1,13 @@
-const express = require ('express');
+const express    = require ('express');
 const bodyParser = require ('body-parser');
 const {ObjectId} = require ('mongodb');
+
 const {mongoose} = require ('./db/mongoose');
-const {Todo} = require ('./models/todo');
-const {User} = require ('./models/user');
+const {Todo}     = require ('./models/todo');
+const {User}     = require ('./models/user');
+
+
+const port = process.env.PORT || 3001;
 
 
 var app = express ();
@@ -52,8 +56,8 @@ app.get('/todos/:id', (req, res) => {
   );
 });
 
-app.listen (3001, () => {
-  console.log ('Starting server at 3001');
+app.listen (port, () => {
+  console.log (`Starting server at ${port}`);
 });
 
 
