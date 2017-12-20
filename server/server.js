@@ -35,14 +35,22 @@ app.get('/todos', (req, res) => {
 app.get('/todos/:id', (req, res) => {
   var id = req.params.id;
   if (!ObjectId.isValid(id)) {
+    // console.log ('route 1');
     return res.status(400).send({msg:"invalid id"});
   }
   Todo.findById(id).then((todo) => {
-    if (!todo) return res.status(404);
+    if (!todo) {
+      // console.log ('route 2');
+      return res.status(404).send();
+    }
+    // console.log ('route 3');
     res.send({todo});
-  }).catch ((e) => res.status(400).send(e));
+  }).catch ((e) => {
+    // console.log ('route 4');
+    return  res.status(400).send(e)
+  }
+  );
 });
-
 
 app.listen (3001, () => {
   console.log ('Starting server at 3001');
