@@ -140,3 +140,57 @@ describe ('DELETE /todos/:id', () => {
       });
   });
 });
+
+
+describe ('PATCH /todos/:id', () => {
+  it('should update the todo', (done) => {
+    var hexId = todos[1]._id.toHexString();
+    var text = "TEST Patch - Local";
+    var completed = true;
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send({text, completed})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.completed).toBe(true);
+        expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completedAt).toBeTruthy();
+      }).end((err, res) => {
+        if (err) {
+          return done (err);
+        }
+        Todo.findById(hexId).then((todo) => {
+          expect(todo.text).toEqual(text);
+          expect(todo.completed).toBe(true);
+          done();
+        }).catch((e) => done(e));
+     });
+  });
+
+
+  it('should clear completedAt when todo is not complete', (done) => {
+    var hexId = todos[1]._id.toHexString();
+    var text = "TEST Patch 2 - Local";
+    var completed = false;
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send({text, completed})
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.completedAt).toBeNull();
+        expect(res.body.todo.text).toBe(text);
+      }).end((err, res) => {
+        if (err) {
+          return done (err);
+        }
+        Todo.findById(hexId).then((todo) => {
+          expect(todo.text).toEqual(text);
+          expect(todo.completed).toBe(false);
+          done();
+        }).catch((e) => done(e));
+     });
+
+  });
+})
