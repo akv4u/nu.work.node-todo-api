@@ -14,7 +14,9 @@ const todos = [{
   text:"Test 1 todo"
 }, {
   _id: new ObjectID(),
-  text:"Test 2 todo"
+  text:"Test 2 todo",
+  completed: true,
+  completedAt:333
 }];
 
 console.log (JSON.stringify(todos, undefined, 2));
@@ -144,7 +146,7 @@ describe ('DELETE /todos/:id', () => {
 
 describe ('PATCH /todos/:id', () => {
   it('should update the todo', (done) => {
-    var hexId = todos[1]._id.toHexString();
+    var hexId = todos[0]._id.toHexString();
     var text = "TEST Patch - Local";
     var completed = true;
 
