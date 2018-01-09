@@ -45,5 +45,5 @@ console.log(data);
 console.log(`token: ${token}`);
 
 
-var decoded = jwt.verify(token+1, '123abc');
+var decoded = jwt.verify(token, '123abc');
 console.log (decoded);

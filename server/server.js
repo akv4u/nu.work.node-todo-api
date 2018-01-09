@@ -7,6 +7,7 @@ const {ObjectId} = require ('mongodb');
 const {mongoose} = require ('./db/mongoose');
 const {Todo}     = require ('./models/todo');
 const {User}     = require ('./models/user');
+const {authenticate}     = require ('./middleware/authenticate');
 
 var app = express ();
 const port = process.env.PORT;
@@ -139,5 +140,9 @@ app.get('/users', (req, res) => {
   });
 });
 
+// Private route
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+});
 
 module.exports = {app};
