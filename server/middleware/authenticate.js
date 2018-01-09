@@ -10,7 +10,7 @@ var authenticate = (req, res, next) => {
     }
     req.user = user;
     req.token = token;
-    next();
+    next(); // this is required, otherwise code below wont execute.
   }).catch((e) => {
     res.status(401).send();
   });
