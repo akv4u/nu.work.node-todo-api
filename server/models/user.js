@@ -85,7 +85,7 @@ UserSchema.statics.findByToken = function (token) {
   });
 };
 
-
+// routine to salt and hash password before saving.npm
 UserSchema.pre('save', function (next) {
   var user = this;
   if (user.isModified('password')) {
