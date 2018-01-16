@@ -260,3 +260,43 @@ describe ('POST /users', () => {
        .end(done);
   });
 });
+
+describe('POST /users/login', () => {
+  it('should login user and return auth token', (done) => {
+    let email     = users[0].email;
+    let password  = users[0].password;
+    request(app)
+      .post('/users/login')
+      .send({email, password})
+      .expect(200)
+      .expect((res) => {
+        expect(res.headers['x-auth']).toBeTruthy(); // toExist is depricated since jest
+        expect(res.body._id).toBeTruthy();
+        expect(res.body.email).toBe(email);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        User.findById(users[0]._id).then((user) => {
+          // expect(user.tokens).toContain ({
+          //   access: 'auth',
+          //   token: res.headers['x-auth']
+          // });
+          done();
+        }).catch((e) => done(e));
+      });
+  });
+
+  it('should reject invali login', (done) => {
+    let email     = users[0].email;
+    let password  = 'somePassword';
+    request(app)
+      .post('/users/login')
+      .send({email, password})
+      .expect(400)
+      .expect((res) => {
+        expect(res.headers['x-auth']).not.toBeTruthy(); // toExist is depricated since jest
+      }).end(done);
+  });
+});
