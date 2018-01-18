@@ -175,9 +175,10 @@ describe ('PATCH /todos/:id', () => {
       .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((res) => {
-        expect(res.body.todo.completed).toBe(true);
         expect(res.body.todo.text).toBe(text);
-        expect(res.body.todo.completedAt).toBeTruthy();
+        expect(res.body.todo.completed).toBe(true);
+        //expect(res.body.todo.completedAt).toBeTruthy();
+        expect(typeof res.body.todo.completedAt).toBe('number');
       }).end((err, res) => {
         if (err) {
           return done (err);
@@ -338,10 +339,10 @@ describe('POST /users/login', () => {
           return done(err);
         }
         User.findById(users[0]._id).then((user) => {
-          // expect(user.tokens).toContain ({
-          //   access: 'auth',
-          //   token: res.headers['x-auth']
-          // });
+          expect(user.toObject().tokens[1]).toMatchObject ({
+            access: 'auth',
+            token: res.headers['x-auth']
+          });
           done();
         }).catch((e) => done(e));
       });
@@ -355,7 +356,7 @@ describe('POST /users/login', () => {
       .send({email, password})
       .expect(400)
       .expect((res) => {
-        expect(res.headers['x-auth']).not.toBeTruthy(); // toExist is depricated since jest
+        expect(res.headers['x-auth']).toBeFalsy(); // toExist is depricated since jest
       }).end(done);
   });
 });
