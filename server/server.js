@@ -13,6 +13,7 @@ const bcrypt = require('bcryptjs');
 var app = express ();
 const port = process.env.PORT;
 
+//set middleware
 app.use(bodyParser.json());
 
 // handling bad json
@@ -67,8 +68,7 @@ app.get('/todos/:id', authenticate, (req, res) => {
     res.send({todo});
   }).catch ((e) => {
     return  res.status(400).send(e)
-  }
-  );
+  });
 });
 
 
@@ -98,7 +98,7 @@ app.patch('/todos/:id', authenticate, (req, res) => {
   var body = _.pick(req.body, ['text', 'completed']);
   // if marked completd, update timestamp
   if (_.isBoolean(body.completed) && body.completed) {
-    body.completedAt = new Date().getTime();
+    body.completedAt = new Date().toISOString();
   }
   else {
     body.completed  = false;
